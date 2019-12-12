@@ -34,7 +34,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission_group.CAMERA;
 
-//4 case: VCARD / EVENT, URL, GEO, TEXT... cant do more...
+//here show 4 case: VCARD / EVENT, URL, GEO, TEXT... cant do more...
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
@@ -100,35 +100,37 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             QRVcardModel qrVcardModel = new QRVcardModel();
             for (int i = 0; i <tokens.length; i++){
-                if (tokens[i].startsWith("BEGIN:")){
+                if (tokens[i].startsWith("BEGIN:")){//
                     qrVcardModel.setType(tokens[i].substring("BEGIN:".length()));//remove BEGIN: to get Type
-                }else if (tokens[i].startsWith("NAME:")){
-                    qrVcardModel.setName(tokens[i].substring("NAME:".length()));//remove BEGIN: to get Type
-                }else if (tokens[i].startsWith("ORG:")){
+                }else if (tokens[i].startsWith("N:")){//
+                    qrVcardModel.setName(tokens[i].substring("N:".length()));//remove BEGIN: to get Type
+                }else if (tokens[i].startsWith("ORG:")){//
                     qrVcardModel.setOrg(tokens[i].substring("ORG:".length()));//remove BEGIN: to get Type
-                }else if (tokens[i].startsWith("TEL:")){
-                    qrVcardModel.setTel(tokens[i].substring("TEL:".length()));
+                }else if (tokens[i].startsWith("TEL;WORK;VOICE:")){//
+                    qrVcardModel.setTel(tokens[i].substring("TEL;WORK;VOICE:".length()));
                 }else if (tokens[i].startsWith("URL:")){
                     qrVcardModel.setUrl(tokens[i].substring("URL:".length()));
-                }else if (tokens[i].startsWith("EMAIL:")){
-                    qrVcardModel.setEmail(tokens[i].substring("EMAIL:".length()));
-                }else if (tokens[i].startsWith("ADDRESS")){
-                    qrVcardModel.setAddress(tokens[i].substring("ADDRESS:".length()));
+                }else if (tokens[i].startsWith("EMAIL;PREF;INTERNET:")){//
+                    qrVcardModel.setEmail(tokens[i].substring("EMAIL;PREF;INTERNET:".length()));
+                }else if (tokens[i].startsWith("ADR")){//
+                    qrVcardModel.setAddress(tokens[i].substring("ADR:".length()));
                 }else if (tokens[i].startsWith("NOTE:")){
                     qrVcardModel.setNote(tokens[i].substring("NOTE:".length()));
                 }else if (tokens[i].startsWith("SUMMARY:")){
                     qrVcardModel.setSummary(tokens[i].substring("SUMMARY:".length()));
-                }else if (tokens[i].startsWith("DTSTART:")){
-                    qrVcardModel.setDtstart(tokens[i].substring("DTSTART:".length()));
-                }else if (tokens[i].startsWith("DTEND:")){
-                    qrVcardModel.setDtend(tokens[i].substring("DTEND:".length()));
+                    //DTSTART
+                }else if (tokens[i].startsWith("START:")){
+                    qrVcardModel.setDtstart(tokens[i].substring("START:".length()));
+                    //DTEND
+                }else if (tokens[i].startsWith("END:")){//
+                    qrVcardModel.setDtend(tokens[i].substring("END:".length()));
                 }
                 //try to show
-                txvResult.setText(qrVcardModel.getType());
-                /*txvResult.setText(qrVcardModel.getType()+"\n"+qrVcardModel.getName()+"\n"+qrVcardModel.getOrg()+"\n"
-                +qrVcardModel.getTel()+"\n"+qrVcardModel.getUrl()+"\n"+qrVcardModel.getEmail()+"\n"
+                /*txvResult.setText(qrVcardModel.getType());*/
+                txvResult.setText("Type: "+qrVcardModel.getType()+"\nName: "+qrVcardModel.getName()+"\nCountry: "+qrVcardModel.getOrg()+"\nPhone: "
+                +qrVcardModel.getTel()+"\n"+qrVcardModel.getUrl()+"\nEmail: "+qrVcardModel.getEmail()+"\nAddress: "
                 +qrVcardModel.getAddress()+"\n"+qrVcardModel.getNote()+"\n"+qrVcardModel.getSummary()+"\n"
-                +qrVcardModel.getDtstart()+"\n"+qrVcardModel.getDtend());*/
+                +qrVcardModel.getDtstart()+"\nEnd: "+qrVcardModel.getDtend());
 
             }
         }
